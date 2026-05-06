@@ -20,7 +20,13 @@ export async function registerPrefsScripts(_window: Window) {
   urlInput.value = resolver.map((e) => e.url).join(';');
 
   const validURL = (url?: string) => {
-    return url && url.length > 0;
+    if (!url || url.length === 0) return false;
+    try {
+      new URL(url.includes('://') ? url : `https://${url}`);
+      return true;
+    } catch {
+      return false;
+    }
   };
   const updateResolver = () => {
     CustomResolverManager.shared.removeAllCustomResolversInZotero();

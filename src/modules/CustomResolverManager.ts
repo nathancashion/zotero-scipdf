@@ -36,21 +36,18 @@ export class CustomResolverManager {
   private get customResolversInZotero() {
     const values = Zotero.Prefs.get(CustomResolverManager.zoteroCustomResolversPrefKey, true);
     if (typeof values !== 'string') { return []; }
-    let result = JSON.parse(values);
-    if (!Array.isArray(result)) {
-      result = [result];
+    try {
+      let result = JSON.parse(values);
+      if (!Array.isArray(result)) {
+        result = [result];
+      }
+      return result as CustomResolver[];
+    } catch {
+      return [];
     }
-    return result as CustomResolver[];
   }
   private set customResolversInZotero(resolvers: CustomResolver[]) {
     Zotero.Prefs.set(CustomResolverManager.zoteroCustomResolversPrefKey, JSON.stringify(resolvers), true);
   }
-
-
-  private init() {
-    this.customResolvers = this.customResolvers.filter(value => this.customResolversInZotero.findIndex(e => isCustomResolverEqual(e, value)));
-  }
-
-
 
 }

@@ -35,6 +35,8 @@ async function onStartup() {
 
   Common.registerPrefs();
 
+  Common.registerRightClickMenuItem();
+
   await Promise.all(
     Zotero.getMainWindows().map((win) => onMainWindowLoad(win)),
   );
@@ -47,8 +49,6 @@ async function onStartup() {
 async function onMainWindowLoad(win: _ZoteroTypes.MainWindow): Promise<void> {
   // Create ztoolkit for every window
   addon.data.ztoolkit = createZToolkit();
-
-  Common.registerRightClickMenuItem();
 }
 
 async function onMainWindowUnload(win: Window): Promise<void> {

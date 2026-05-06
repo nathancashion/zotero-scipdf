@@ -1,5 +1,6 @@
 prefs-title = PDF Download
 menuitem-fetch = Fetch PDF
+  .label = Fetch PDF
 collectionmenuitem-fetch = Fetch PDF
 menutoolsitem-fetchall = Fetch PDF of All Items
 popwin-fetching = Fetching

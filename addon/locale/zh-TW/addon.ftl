@@ -1,5 +1,6 @@
 prefs-title = PDF下載
 menuitem-fetch = 獲取PDF
+  .label = 獲取PDF
 collectionmenuitem-fetch = 獲取PDF
 menutoolsitem-fetchall = 獲取所有項目的PDF
 popwin-fetching = 獲取中
