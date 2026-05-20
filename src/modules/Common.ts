@@ -1,9 +1,10 @@
 import { config } from "../../package.json";
-import { getString, getLocaleID } from "../utils/locale";
+import { getString } from "../utils/locale";
 import { SciHubFetcher } from "./SciHubFetcher";
 
 export class Common {
-  private static menuRegisteredID?: string | false;
+  private static menuItemId = "scipdf-fetch-menuitem";
+  private static popupShowingListener?: (event: Event) => void;
 
   static registerPrefs() {
     const prefOptions = {
@@ -17,33 +18,51 @@ export class Common {
 
   static registerRightClickMenuItem() {
     const menuIcon = `chrome://${config.addonRef}/content/icons/sci-hub-logo.svg`;
-    this.menuRegisteredID = Zotero.MenuManager.registerMenu({
-      menuID: "scipdf-fetch",
-      pluginID: config.addonID,
-      target: "main/library/item",
-      menus: [
-        {
-          menuType: "menuitem",
-          l10nID: getLocaleID("menuitem-fetch"),
-          icon: menuIcon,
-          onShowing: (_event, context) => {
-            const visible = context.items?.some((item: Zotero.Item) => item.isRegularItem()) ?? false;
-            context.setVisible(visible);
-          },
-          onCommand: (_event, context) => {
-            if (context.items) {
-              SciHubFetcher.updateItems(context.items, false);
-            }
-          },
-        },
-      ],
-    });
+
+    this.popupShowingListener = (event: Event) => {
+      const popup = event.target as Element;
+      if (popup.id !== "zotero-itemmenu") return;
+      // Remove old item if it exists
+      const existing = popup.querySelector(`#${this.menuItemId}`);
+      if (existing) existing.remove();
+
+      const doc = popup.ownerDocument;
+      if (!doc) return;
+      const menuitem = doc.createXULElement("menuitem") as XUL.MenuItem;
+      menuitem.id = this.menuItemId;
+      menuitem.setAttribute("label", getString("menuitem-fetch", "label"));
+      menuitem.setAttribute("class", "menuitem-iconic");
+      (menuitem as unknown as HTMLElement).style.setProperty("list-style-image", `url(${menuIcon})`);
+
+      const items = Zotero.getActiveZoteroPane()?.getSelectedItems() ?? [];
+      const hasRegularItem = items.some((item: Zotero.Item) => item.isRegularItem());
+      (menuitem as unknown as HTMLElement).hidden = !hasRegularItem;
+
+      menuitem.addEventListener("command", () => {
+        const selectedItems = Zotero.getActiveZoteroPane()?.getSelectedItems() ?? [];
+        if (selectedItems.length > 0) {
+          SciHubFetcher.updateItems(selectedItems, false).catch((error) => {
+            ztoolkit.log(`Fetch PDF error: ${error}`);
+          });
+        }
+      });
+
+      popup.appendChild(menuitem);
+    };
+
+    for (const win of Zotero.getMainWindows()) {
+      win.document.addEventListener("popupshowing", this.popupShowingListener);
+    }
   }
 
   static unregisterRightClickMenuItem() {
-    if (this.menuRegisteredID) {
-      Zotero.MenuManager.unregisterMenu(this.menuRegisteredID);
-      this.menuRegisteredID = undefined;
+    if (this.popupShowingListener) {
+      for (const win of Zotero.getMainWindows()) {
+        win.document.removeEventListener("popupshowing", this.popupShowingListener);
+        const existing = win.document.getElementById(this.menuItemId);
+        if (existing) existing.remove();
+      }
+      this.popupShowingListener = undefined;
     }
   }
 }

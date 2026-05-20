@@ -1,6 +1,7 @@
 {
   "name": "zotero-scipdf",
-  "version": "8.0.4",
+  "version": "8.0.5",
+  "type": "module",
   "description": "Download PDF from Sci-Hub automatically For Zotero",
   "config": {
     "addonName": "Sci-PDF",
@@ -11,13 +12,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/syt2/zotero-scipdf.git"
+    "url": "git+https://github.com/nathancashion/zotero-scipdf.git"
   },
   "author": "syt2",
   "bugs": {
-    "url": "https://github.com/syt2/zotero-scipdf/issues"
+    "url": "https://github.com/nathancashion/zotero-scipdf/issues"
   },
-  "homepage": "https://github.com/syt2/zotero-scipdf#readme",
+  "homepage": "https://github.com/nathancashion/zotero-scipdf#readme",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "start": "zotero-plugin serve",

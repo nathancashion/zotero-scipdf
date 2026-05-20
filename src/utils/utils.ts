@@ -52,7 +52,7 @@ export class Utils {
   ) {
     const win = new ztoolkit.ProgressWindow(title, {
       closeOnClick: true,
-      closeTime: closeTime,
+      closeOtherProgressWindows: true,
     }).createLine({
       text: message,
       type: type,

@@ -40,57 +40,67 @@ export class SciHubFetcher {
     }
 
     for (const item of filtered) {
-      const scihubUrls = await this.buildSciHubURLs(item);
-      if (scihubUrls.length <= 0) {
-        Utils.showPopWin(
-          getString("popwin-doimissing"),
+      try {
+        const scihubUrls = await this.buildSciHubURLs(item);
+        if (scihubUrls.length <= 0) {
+          Utils.showPopWin(
+            getString("popwin-doimissing"),
+            item.getDisplayTitle(),
+            "fail",
+          );
+          ztoolkit.log(`DOI Not Found for "${item.getField("title")}"`);
+          continue;
+        }
+
+        const win = Utils.showPopWin(
+          getString("popwin-fetching"),
           item.getDisplayTitle(),
-          "fail",
+          undefined,
+          -1,
         );
-        ztoolkit.log(`DOI Not Found for "${item.getField("title")}"`);
-        continue;
-      }
 
-      const win = Utils.showPopWin(
-        getString("popwin-fetching"),
-        item.getDisplayTitle(),
-      );
-
-      let resultAction: (() => void) | undefined;
-      for (const scihubUrl of scihubUrls) {
-        try {
-          await this.fetchPDF(scihubUrl, item);
-          resultAction = () => {
-            Utils.showPopWin(
-              getString("popwin-fetchsuccess"),
-              item.getDisplayTitle(),
-              "success",
-            );
-          };
-          break;
-        } catch (error) {
-          if (error instanceof PDFNotFoundError) {
+        let resultAction: (() => void) | undefined;
+        for (const scihubUrl of scihubUrls) {
+          try {
+            await this.fetchPDF(scihubUrl, item);
             resultAction = () => {
               Utils.showPopWin(
-                getString("popwin-pdfnotavaliable"),
+                getString("popwin-fetchsuccess"),
                 item.getDisplayTitle(),
-                "fail",
+                "success",
               );
             };
-          } else {
-            resultAction = () => {
-              Utils.showPopWin(
-                getString("popwin-unknownerror"),
-                item.getDisplayTitle(),
-                "fail",
-                5000,
-              );
-            };
+            break;
+          } catch (error) {
+            if (error instanceof PDFNotFoundError) {
+              resultAction = () => {
+                Utils.showPopWin(
+                  getString("popwin-pdfnotavaliable"),
+                  item.getDisplayTitle(),
+                  "fail",
+                );
+              };
+            } else {
+              resultAction = () => {
+                Utils.showPopWin(
+                  getString("popwin-unknownerror"),
+                  item.getDisplayTitle(),
+                  "fail",
+                  5000,
+                );
+              };
+            }
           }
         }
+        try {
+          win.close();
+        } catch {
+          // Progress window may have been auto-closed already
+        }
+        resultAction?.();
+      } catch (error) {
+        ztoolkit.log(`Error processing item "${item.getDisplayTitle()}": ${error}`);
       }
-      win.close();
-      resultAction?.();
     }
   }
 

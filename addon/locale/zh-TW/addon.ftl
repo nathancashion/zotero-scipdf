@@ -1,5 +1,5 @@
 prefs-title = PDF下載
-menuitem-fetch = 獲取PDF
+menuitem-fetch =
   .label = 獲取PDF
 collectionmenuitem-fetch = 獲取PDF
 menutoolsitem-fetchall = 獲取所有項目的PDF

@@ -57,6 +57,7 @@ async function onMainWindowUnload(win: Window): Promise<void> {
 }
 
 function onShutdown(): void {
+  Common.unregisterRightClickMenuItem();
   ztoolkit.unregisterAll();
   addon.data.dialog?.window?.close();
   // Remove addon object

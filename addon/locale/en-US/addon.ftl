@@ -1,5 +1,5 @@
 prefs-title = PDF Download
-menuitem-fetch = Fetch PDF
+menuitem-fetch =
   .label = Fetch PDF
 collectionmenuitem-fetch = Fetch PDF
 menutoolsitem-fetchall = Fetch PDF of All Items
