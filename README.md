@@ -1,23 +1,23 @@
 # SciPDF For Zotero
 
-[![zotero target version](https://img.shields.io/badge/Zotero-8%2F9-green?style=flat-square&logo=zotero&logoColor=CC2936)](https://www.zotero.org)
+[![zotero target version](https://img.shields.io/badge/Zotero-8%2F9%2F10-green?style=flat-square&logo=zotero&logoColor=CC2936)](https://www.zotero.org)
 [![Using Zotero Plugin Template](https://img.shields.io/badge/Using-Zotero%20Plugin%20Template-blue?style=flat-square&logo=github)](https://github.com/windingwind/zotero-plugin-template)
 
-> **Note:** This is a fork of [syt2/zotero-scipdf](https://github.com/syt2/zotero-scipdf), updated for Zotero 9 compatibility with the help of AI (vibe-coded). All credit for the original plugin goes to [syt2](https://github.com/syt2). If the upstream repo is updated for Zotero 9, you should prefer the original.
+> **Note:** This is a fork of [syt2/zotero-scipdf](https://github.com/syt2/zotero-scipdf), maintained for Zotero 8–10 with the help of AI (vibe-coded). All credit for the original plugin goes to [syt2](https://github.com/syt2).
 
 English | [简体中文](doc/README-zhCN.md)
 
 ## What changed in this fork
 
 - Migrated to the official `Zotero.MenuManager` API (Zotero 8+)
-- Updated esbuild target and dependencies for the Firefox 140 platform (Zotero 8/9)
+- Updated esbuild target and dependencies for the Firefox 140 platform (Zotero 8–10)
 - Fixed unsafe `JSON.parse` that could crash the plugin on corrupted preferences
 - Improved URL validation in the preferences panel
 - Removed deprecated options and dead code
 - Now requires Zotero 8 or later (`strict_min_version: 7.999`)
 
 # Introduction
-This is a Sci-Hub plugin designed for Zotero 8 and Zotero 9.  
+This is a Sci-Hub plugin designed for Zotero 8, 9, and 10.
 This plugin utilizes Zotero's built-in [PDF resolvers](https://www.zotero.org/support/kb/custom_pdf_resolvers) feature.  
 It automatically writes Sci-Hub's resolver into the `extensions.zotero.findPDFs.resolvers` field and enabling automatic PDF downloads from Sci-Hub within Zotero.
 
