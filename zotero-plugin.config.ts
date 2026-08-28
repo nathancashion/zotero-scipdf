@@ -40,9 +40,9 @@ export default defineConfig({
   },
   release: {
     bumpp: {
-      commit: "chore(publish): release V%s",
-      tag: "V%s",
-    }
+      commit: "chore(publish): release v%s",
+      tag: "v%s",
+    },
   },
 
   test: {
